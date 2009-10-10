@@ -50,8 +50,8 @@ protected:
 	Material *          m_pBasic;
 	Material *          m_pHDR;
 
-	Animation           m_kRunAnim;
-	Skeleton            m_kSkeleton;
+	PAFAnimation        m_kRunAnim;
+	PSFSkeleton         m_kSkeleton;
 	Entity *            m_pSkyEntity;
 	Entity *            m_pStoneEntity;
 	Entity *            m_pTerrainEntity;

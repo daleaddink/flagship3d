@@ -59,7 +59,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9d.lib d3d10.lib d3d10_1d.lib d3dx10d.lib"
+				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9d.lib d3d10.lib d3dx10d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="../../Depend/DirectX/Lib/x86"
 				GenerateDebugInformation="true"
@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9.lib d3d10.lib d3d10_1.lib d3dx10.lib"
+				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9.lib d3d10.lib d3dx10.lib"
 				AdditionalLibraryDirectories="../../Depend/DirectX/Lib/x86"
 				GenerateDebugInformation="false"
 				AssemblyDebug="2"
@@ -208,7 +208,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9d.lib d3d10.lib d3d10_1d.lib d3dx10d.lib"
+				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9d.lib d3d10.lib d3dx10d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="../../Depend/DirectX/Lib/x86"
 				GenerateDebugInformation="true"
@@ -282,7 +282,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9.lib d3d10.lib d3d10_1.lib d3dx10.lib"
+				AdditionalDependencies="dxerr.lib dxguid.lib d3d9.lib d3dx9.lib d3d10.lib d3dx10.lib"
 				AdditionalLibraryDirectories="../../Depend/DirectX/Lib/x86"
 				GenerateDebugInformation="false"
 				AssemblyDebug="2"
