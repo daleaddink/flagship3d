@@ -17,7 +17,7 @@ namespace Flagship
 		enum
 		{
 			Mesh_Position      = 1,
-			Mesh_BlendWeights   = 2,
+			Mesh_BlendWeights  = 2,
 			Mesh_BlendIndices  = 4,
 			Mesh_Normal        = 8,
 			Mesh_Tangent       = 16,

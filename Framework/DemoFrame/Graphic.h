@@ -33,7 +33,9 @@
 #include "../../Graphic/Main/Mesh.h"
 #include "../../Graphic/Main/Texture.h"
 #include "../../Graphic/Main/Skeleton.h"
+#include "../../Graphic/Main/PSFSkeleton.h"
 #include "../../Graphic/Main/Animation.h"
+#include "../../Graphic/Main/PAFAnimation.h"
 #include "../../Graphic/Main/TerrainTile.h"
 
 //--------Material--------
