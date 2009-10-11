@@ -1333,6 +1333,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\OgreMesh.h"
+					>
+				</File>
+				<File
 					RelativePath=".\PAFAnimation.h"
 					>
 				</File>
@@ -1370,6 +1374,10 @@
 				</File>
 				<File
 					RelativePath=".\Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\OgreMesh.cpp"
 					>
 				</File>
 				<File
