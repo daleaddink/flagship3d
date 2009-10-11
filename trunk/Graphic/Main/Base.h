@@ -62,6 +62,7 @@ namespace Flagship
 			Mesh_XMesh,
 			Mesh_PMFMesh,
 			Mesh_SDKMesh,
+			Mesh_OgreMesh,
 			Mesh_Terrain,
 			Resource_Texture,
 			Texture_General,
