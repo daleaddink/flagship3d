@@ -603,6 +603,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\D3D9OgreMesh.h"
+					>
+				</File>
+				<File
 					RelativePath=".\D3D9PMFMesh.h"
 					>
 				</File>
@@ -668,6 +672,10 @@
 				</File>
 				<File
 					RelativePath=".\D3D9Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\D3D9OgreMesh.cpp"
 					>
 				</File>
 				<File
