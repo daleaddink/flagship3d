@@ -2,6 +2,7 @@
 #include "D3D9RenderWindow.h"
 #include "D3D9XMesh.h"
 #include "D3D9PMFMesh.h"
+#include "D3D9OgreMesh.h"
 #include "D3D9TerrainTile.h"
 #include "D3D9RenderTexture.h"
 #include "D3D9RenderCubeTexture.h"
@@ -135,6 +136,19 @@ namespace Flagship
 			{
 				// 获取模型信息
 				D3D9PMFMesh * pMesh = ( D3D9PMFMesh * ) pResource;
+				pVertexBuffer = pMesh->GetVertexBuffer();
+				pIndexBuffer = pMesh->GetIndexBuffer();
+				pVertexDecl = pMesh->GetVertexDeclaration();
+				dwNumTriangle = pMesh->GetNumTriangle();
+				dwNumVertex = pMesh->GetNumVertex();
+				dwVertexSize = pMesh->GetVertexSize();
+
+				break;
+			}
+		case Base::Mesh_OgreMesh:
+			{
+				// 获取模型信息
+				D3D9OgreMesh * pMesh = ( D3D9OgreMesh * ) pResource;
 				pVertexBuffer = pMesh->GetVertexBuffer();
 				pIndexBuffer = pMesh->GetIndexBuffer();
 				pVertexDecl = pMesh->GetVertexDeclaration();

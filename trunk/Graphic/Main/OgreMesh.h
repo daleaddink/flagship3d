@@ -228,6 +228,49 @@ namespace Flagship
 		*/
 	};
 
+	/// Vertex element semantics, used to identify the meaning of vertex buffer contents
+	enum VertexElementSemantic {
+		/// Position, 3 reals per vertex
+		VES_POSITION = 1,
+		/// Blending weights
+		VES_BLEND_WEIGHTS = 2,
+		/// Blending indices
+		VES_BLEND_INDICES = 3,
+		/// Normal, 3 reals per vertex
+		VES_NORMAL = 4,
+		/// Diffuse colours
+		VES_DIFFUSE = 5,
+		/// Specular colours
+		VES_SPECULAR = 6,
+		/// Texture coordinates
+		VES_TEXTURE_COORDINATES = 7,
+		/// Binormal (Y axis if normal is Z)
+		VES_BINORMAL = 8,
+		/// Tangent (X axis if normal is Z)
+		VES_TANGENT = 9
+
+	};
+
+	/// Vertex element type, used to identify the base types of the vertex contents
+	enum VertexElementType
+	{
+		VET_FLOAT1 = 0,
+		VET_FLOAT2 = 1,
+		VET_FLOAT3 = 2,
+		VET_FLOAT4 = 3,
+		/// alias to more specific colour type - use the current rendersystem's colour packing
+		VET_COLOUR = 4,
+		VET_SHORT1 = 5,
+		VET_SHORT2 = 6,
+		VET_SHORT3 = 7,
+		VET_SHORT4 = 8,
+		VET_UBYTE4 = 9,
+		/// D3D style compact colour
+		VET_COLOUR_ARGB = 10,
+		/// GL style compact colour
+		VET_COLOUR_ABGR = 11
+	};
+
 	class _DLL_Export OgreMesh : public Mesh
 	{
 	public:
@@ -242,25 +285,45 @@ namespace Flagship
 		virtual void          Destory();
 
 		// 获取顶点数据
-		virtual Vector3f *    GetVertexData() { return m_kPMFMeshData.pPositions; }
+		virtual Vector3f *    GetVertexData() { return NULL; }
 
 		// 获取索引数据
-		virtual WORD *        GetIndexData() { return m_kPMFMeshData.pFaceIndices; }
+		virtual WORD *        GetIndexData() { return NULL; }
 
 		// 获取法线数据
-		virtual Vector3f *    GetNormalData() { return m_kPMFMeshData.pNormals; }
+		virtual Vector3f *    GetNormalData() { return NULL; }
 
 	private:
 		// 读取数据头
 		unsigned short        ReadChunk( char * pData );
-		
+
+		// 读取数据
+		unsigned short        ReadShort( char * pData );
+
+		// 读取数据
+		int                   ReadInt( char * pData );
+
+		// 读取数据
+		bool                  ReadBool( char * pData );
+
+		// 读取模型数据
+		void                  ReadGeometry( char * pData );
+
 	private:
 		// 数据长度
 		unsigned int          m_uiChunkSize;
 
 		// 当前已读数据
 		unsigned int          m_uiReadSize;
-				
+
+		// 索引格式
+		bool                  m_b32Index;
+
+		// 顶点数据
+		char *                m_pVertexData;
+
+		// 索引数据
+		char *                m_pIndexData;				
 	};
 }
 
