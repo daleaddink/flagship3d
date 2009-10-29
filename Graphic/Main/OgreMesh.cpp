@@ -147,7 +147,7 @@ namespace Flagship
 
 	bool    OgreMesh::ReadBool( char * pData )
 	{
-		bool bResult
+		bool bResult;
 
 		bResult = * ( (bool *) pData );
 		m_uiReadSize += sizeof( bool );
@@ -167,7 +167,7 @@ namespace Flagship
 
 		while( m_uiReadSize < (int) m_kFileBuffer.GetSize() )
 		{
-			streamID = ReadChunk( pData );
+			unsigned short streamID = ReadChunk( pData );
 
 			if ( streamID == M_GEOMETRY_VERTEX_DECLARATION )
 			{

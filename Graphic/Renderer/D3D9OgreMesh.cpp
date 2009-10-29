@@ -193,9 +193,9 @@ namespace Flagship
 		return true;
 	}
 
-	void    D3D9PMFMesh::UnCache()
+	void    D3D9OgreMesh::UnCache()
 	{
-		PMFMesh::UnCache();
+		OgreMesh::UnCache();
 		SAFE_RELEASE( m_pD3D9VertexBuffer );
 		SAFE_RELEASE( m_pD3D9IndexBuffer );
 	}
