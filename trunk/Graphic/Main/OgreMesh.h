@@ -309,7 +309,7 @@ namespace Flagship
 		// 读取模型数据
 		void                  ReadGeometry( char * pData );
 
-	private:
+	protected:
 		// 数据长度
 		unsigned int          m_uiChunkSize;
 
