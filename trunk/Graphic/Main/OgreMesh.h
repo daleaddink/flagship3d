@@ -306,6 +306,9 @@ namespace Flagship
 		// 读取数据
 		bool                  ReadBool( char * pData );
 
+		// 读取数据
+		void                  ReadString( char * pData );
+
 		// 读取模型数据
 		void                  ReadGeometry( char * pData );
 

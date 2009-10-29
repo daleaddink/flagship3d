@@ -18,7 +18,7 @@ namespace Flagship
 	{
 		const int OGRE_STREAM_TEMP_SIZE = 128;
 		char * pData = (char *) m_kFileBuffer.GetPointer();
-		int m_uiReadSize = 0;
+		m_uiReadSize = 0;
 
 		// Read header and determine the version
 		unsigned short headerID;
@@ -40,11 +40,7 @@ namespace Flagship
 		}
 
 		// Read version
-		char * szVer[128];
-		memcpy( szVer, pData, OGRE_STREAM_TEMP_SIZE * sizeof(char) );
-		m_uiReadSize += OGRE_STREAM_TEMP_SIZE * sizeof(wchar_t);
-		pData += OGRE_STREAM_TEMP_SIZE * sizeof(wchar_t);
-		szVer[128] = '\0';
+		ReadString( pData );
 
 		unsigned short streamID;
 		while( m_uiReadSize < (int) m_kFileBuffer.GetSize() )
@@ -154,6 +150,47 @@ namespace Flagship
 		pData += sizeof( bool );
 
 		return bResult;
+	}
+
+	void    OgreMesh::ReadString( char * pData )
+	{
+		const int OGRE_STREAM_TEMP_SIZE = 128;
+		char tmpBuf[OGRE_STREAM_TEMP_SIZE];
+		string retString;
+		size_t readCount = OGRE_STREAM_TEMP_SIZE-1;
+		// Keep looping while not hitting delimiter
+		while ( m_uiReadSize < m_kFileBuffer.GetSize() )
+		{
+			memcpy( tmpBuf, pData, OGRE_STREAM_TEMP_SIZE-1 );
+			pData += OGRE_STREAM_TEMP_SIZE-1;
+			m_uiReadSize += OGRE_STREAM_TEMP_SIZE-1;
+
+			// Terminate string
+			tmpBuf[readCount] = '\0';
+
+			char* p = strchr(tmpBuf, '\n');
+			if (p != 0)
+			{
+				// Reposition backwards
+				pData += (long)(p + 1 - tmpBuf - readCount);
+				m_uiReadSize += (long)(p + 1 - tmpBuf - readCount);
+				*p = '\0';
+			}
+
+			retString += tmpBuf;
+
+			if (p != 0)
+			{
+				// Trim off trailing CR if this was a CR/LF entry
+				if (retString.length() && retString[retString.length()-1] == '\r')
+				{
+					retString.erase(retString.length()-1, 1);
+				}
+
+				// Found terminator, break out
+				break;
+			}
+		}
 	}
 
 	void    OgreMesh::ReadGeometry( char * pData )

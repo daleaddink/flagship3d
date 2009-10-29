@@ -67,6 +67,7 @@
 #include "../../Graphic/Renderer/D3D9Effect.h"
 #include "../../Graphic/Renderer/D3D9XMesh.h"
 #include "../../Graphic/Renderer/D3D9PMFMesh.h"
+#include "../../Graphic/Renderer/D3D9OgreMesh.h"
 #include "../../Graphic/Renderer/D3D9TerrainTile.h"
 #include "../../Graphic/Renderer/D3D9Renderer.h"
 #include "../../Graphic/Renderer/D3D9RenderTexture.h"
