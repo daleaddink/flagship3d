@@ -295,29 +295,29 @@ namespace Flagship
 
 	private:
 		// 读取数据头
-		unsigned short        ReadChunk( char * pData );
+		unsigned short        ReadChunk( char ** ppData );
 
 		// 读取数据
-		unsigned short        ReadShort( char * pData );
+		unsigned short        ReadShort( char ** ppData );
 
 		// 读取数据
-		int                   ReadInt( char * pData );
+		unsigned int          ReadInt( char ** ppData );
 
 		// 读取数据
-		bool                  ReadBool( char * pData );
+		bool                  ReadBool( char ** ppData );
 
 		// 读取数据
-		void                  ReadString( char * pData );
+		void                  ReadString( char ** ppData );
 
 		// 读取模型数据
-		void                  ReadGeometry( char * pData );
+		void                  ReadGeometry( char ** ppData );
+
+		// 是否到达文件结束
+		bool                  IsEnd( char * pData );
 
 	protected:
 		// 数据长度
 		unsigned int          m_uiChunkSize;
-
-		// 当前已读数据
-		unsigned int          m_uiReadSize;
 
 		// 索引格式
 		bool                  m_b32Index;
