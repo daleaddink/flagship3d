@@ -170,7 +170,7 @@ void    MonsterRunLogic::Initialize()
 	
 	m_pStoneEntity = new Entity( wstring( L"StoneEntity" ) );
 	m_pStoneEntity->AttachResource( m_pStoneMesh, m_pThinFlim );
-	m_pStoneEntity->SetInnerBound( m_pStoneMesh );
+//	m_pStoneEntity->SetInnerBound( m_pStoneMesh );
 	m_pStoneEntity->SetOuterBound( &kStoneBox );
 	m_pStoneEntity->SetCastShadow( false );
 	m_pStoneEntity->SetReceiveShadow( false );

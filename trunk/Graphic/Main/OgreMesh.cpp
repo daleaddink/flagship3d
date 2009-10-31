@@ -18,14 +18,12 @@ namespace Flagship
 	{
 		const int OGRE_STREAM_TEMP_SIZE = 128;
 		char * pData = (char *) m_kFileBuffer.GetPointer();
-		m_uiReadSize = 0;
 
 		// Read header and determine the version
 		unsigned short headerID;
 
 		// Read header ID
 		headerID = * ( (unsigned short *) pData );
-		m_uiReadSize += sizeof( unsigned short );
 		pData += sizeof( unsigned short );
 		
 		if ( headerID != M_HEADER )
@@ -40,56 +38,76 @@ namespace Flagship
 		}
 
 		// Read version
-		ReadString( pData );
+		ReadString( &pData );
 
 		unsigned short streamID;
-		while( m_uiReadSize < (int) m_kFileBuffer.GetSize() )
+		while( ! IsEnd( pData ) )
 		{
-			streamID = ReadChunk( pData );
+			streamID = ReadChunk( &pData );
 			
 			if ( streamID == M_MESH )
 			{
-				bool bSkeleton = ReadBool( pData );
-				while( m_uiReadSize < (int) m_kFileBuffer.GetSize() )
+				bool bSkeleton = ReadBool( &pData );
+				streamID = ReadChunk( &pData );
+				while( ( ! IsEnd( pData ) ) &&
+					( streamID == M_GEOMETRY ||
+					streamID == M_SUBMESH ||
+					streamID == M_MESH_SKELETON_LINK ||
+					streamID == M_MESH_BONE_ASSIGNMENT ||
+					streamID == M_MESH_LOD ||
+					streamID == M_MESH_BOUNDS ||
+					streamID == M_SUBMESH_NAME_TABLE ||
+					streamID == M_EDGE_LISTS ||
+					streamID == M_POSES ||
+					streamID == M_ANIMATIONS ||
+					streamID == M_TABLE_EXTREMES) )
 				{
-					streamID = ReadChunk( pData );
-
 					if ( streamID == M_GEOMETRY )
 					{
-						ReadGeometry( pData );
+						ReadGeometry( &pData );
 					}
 					else if ( streamID == M_SUBMESH )
 					{
-						bool bSharedVertex = ReadBool( pData );
-						int iIndexCount = ReadInt( pData );
-						m_b32Index = ReadBool( pData );
+						ReadString( &pData );
+
+						bool bSharedVertex = ReadBool( &pData );
+						unsigned int uiIndexCount = ReadInt( &pData );
+						m_dwNumTrangle = uiIndexCount / 3;
+						m_b32Index = ReadBool( &pData );
 
 						m_pIndexData = pData;
 						if ( m_b32Index )
 						{
-							pData += iIndexCount * sizeof( int );
+							pData += uiIndexCount * sizeof( unsigned int );
 						}
 						else
 						{
-							pData += iIndexCount * sizeof( unsigned short );
+							pData += uiIndexCount * sizeof( unsigned short );
 						}
 
 						if ( ! bSharedVertex )
 						{
-							ReadGeometry( pData );
+							streamID = ReadChunk( &pData );
+							ReadGeometry( &pData );
 						}
 					}
 					else
 					{
-						m_uiReadSize += m_uiChunkSize; 
 						pData += m_uiChunkSize;
 					}
+
+					if ( ! IsEnd( pData ) )
+					{
+						streamID = ReadChunk( &pData );
+					}
 				}
+
+				pData -= sizeof(unsigned short) + sizeof(unsigned int);
 			}
 			else
 			{
-				m_uiReadSize += m_uiChunkSize; 
 				pData += m_uiChunkSize;
+				break;
 			}
 		}
 
@@ -104,66 +122,60 @@ namespace Flagship
 		m_dwVertexSize = 0;
 	}
 
-	unsigned short    OgreMesh::ReadChunk( char * pData )
+	unsigned short    OgreMesh::ReadChunk( char ** ppData )
 	{
 		unsigned int streamID;
 
-		streamID = * ( (unsigned short *) pData );
-		m_uiReadSize += sizeof( unsigned short );
-		pData += sizeof( unsigned short );
+		streamID = * ( (unsigned short *) *ppData );
+		*ppData += sizeof( unsigned short );
 
-		m_uiChunkSize = * ( (int *) pData );
-		m_uiReadSize += sizeof( unsigned int );
-		pData += sizeof( unsigned int );
+		m_uiChunkSize = * ( (int *) *ppData );
+		*ppData += sizeof( unsigned int );
 
 		return streamID;
 	}
 
-	unsigned short    OgreMesh::ReadShort( char * pData )
+	unsigned short    OgreMesh::ReadShort( char ** ppData )
 	{
 		unsigned short uiResult;
 
-		uiResult = * ( (unsigned short *) pData );
-		m_uiReadSize += sizeof( unsigned short );
-		pData += sizeof( unsigned short );
+		uiResult = * ( (unsigned short *) *ppData );
+		*ppData += sizeof( unsigned short );
 
 		return uiResult;
 	}
 
-	int    OgreMesh::ReadInt( char * pData )
+	unsigned int    OgreMesh::ReadInt( char ** ppData )
 	{
-		int iResult;
+		unsigned int uiResult;
 
-		iResult = * ( (int *) pData );
-		m_uiReadSize += sizeof( int );
-		pData += sizeof( int );
+		uiResult = * ( (unsigned int *) *ppData );
+		*ppData += sizeof( unsigned int );
 
-		return iResult;
+		return uiResult;
 	}
 
-	bool    OgreMesh::ReadBool( char * pData )
+	bool    OgreMesh::ReadBool( char ** ppData )
 	{
 		bool bResult;
 
-		bResult = * ( (bool *) pData );
-		m_uiReadSize += sizeof( bool );
-		pData += sizeof( bool );
+		bResult = * ( (bool *) *ppData );
+		*ppData += sizeof( bool );
 
 		return bResult;
 	}
 
-	void    OgreMesh::ReadString( char * pData )
+	void    OgreMesh::ReadString( char ** ppData )
 	{
 		const int OGRE_STREAM_TEMP_SIZE = 128;
 		char tmpBuf[OGRE_STREAM_TEMP_SIZE];
 		string retString;
 		size_t readCount = OGRE_STREAM_TEMP_SIZE-1;
 		// Keep looping while not hitting delimiter
-		while ( m_uiReadSize < m_kFileBuffer.GetSize() )
+		while ( ! IsEnd( *ppData ) )
 		{
-			memcpy( tmpBuf, pData, OGRE_STREAM_TEMP_SIZE-1 );
-			pData += OGRE_STREAM_TEMP_SIZE-1;
-			m_uiReadSize += OGRE_STREAM_TEMP_SIZE-1;
+			memcpy( tmpBuf, *ppData, OGRE_STREAM_TEMP_SIZE-1 );
+			*ppData += OGRE_STREAM_TEMP_SIZE-1;
 
 			// Terminate string
 			tmpBuf[readCount] = '\0';
@@ -172,8 +184,7 @@ namespace Flagship
 			if (p != 0)
 			{
 				// Reposition backwards
-				pData += (long)(p + 1 - tmpBuf - readCount);
-				m_uiReadSize += (long)(p + 1 - tmpBuf - readCount);
+				*ppData += (long)(p + 1 - tmpBuf - readCount);
 				*p = '\0';
 			}
 
@@ -193,39 +204,36 @@ namespace Flagship
 		}
 	}
 
-	void    OgreMesh::ReadGeometry( char * pData )
+	void    OgreMesh::ReadGeometry( char ** ppData )
 	{
-		unsigned int uiVertexCount = * ( (unsigned int *) pData );
-		m_uiReadSize += sizeof( unsigned int );
-		pData += sizeof( unsigned int );
-
+		unsigned int uiVertexCount = ReadInt( ppData );
 		m_dwNumVertex = uiVertexCount;
-		m_dwNumTrangle = uiVertexCount / 3;
-
-		while( m_uiReadSize < (int) m_kFileBuffer.GetSize() )
+		
+		unsigned short streamID = ReadChunk( ppData );
+		while( ( ! IsEnd( *ppData ) ) &&
+			( streamID == M_GEOMETRY_VERTEX_DECLARATION 
+			|| streamID == M_GEOMETRY_VERTEX_BUFFER ) )
 		{
-			unsigned short streamID = ReadChunk( pData );
-
 			if ( streamID == M_GEOMETRY_VERTEX_DECLARATION )
 			{
 				int iTexCount = 1;
-				while( m_uiReadSize < (int) m_kFileBuffer.GetSize() )
+				streamID = ReadChunk( ppData );
+				while( ( ! IsEnd( *ppData ) ) &&
+					streamID == M_GEOMETRY_VERTEX_ELEMENT )
 				{
-					streamID = ReadChunk( pData );
-
 					if ( streamID == M_GEOMETRY_VERTEX_ELEMENT )
 					{
 						unsigned short source, offset, index, tmp;
 						VertexElementType vType;
 						VertexElementSemantic vSemantic;
 
-						source = ReadShort( pData );
-						tmp = ReadShort( pData );
+						source = ReadShort( ppData );
+						tmp = ReadShort( ppData );
 						vType = static_cast<VertexElementType>(tmp);
-						tmp = ReadShort( pData );
+						tmp = ReadShort( ppData );
 						vSemantic = static_cast<VertexElementSemantic>(tmp);
-						offset = ReadShort( pData );
-						index = ReadShort( pData );
+						offset = ReadShort( ppData );
+						index = ReadShort( ppData );
 
 						switch ( vSemantic )
 						{
@@ -275,27 +283,51 @@ namespace Flagship
 					}
 					else
 					{
-						m_uiReadSize += m_uiChunkSize; 
-						pData += m_uiChunkSize;
+						*ppData += m_uiChunkSize;
+					}
+
+					if ( ! IsEnd( *ppData ) )
+					{
+						streamID = ReadChunk( ppData );
 					}
 				}
+
+				*ppData -= sizeof(unsigned short) + sizeof(unsigned int);
 			}
 			else if ( streamID == M_GEOMETRY_VERTEX_BUFFER )
 			{
 				unsigned short bindIndex, vertexSize;
 
-				bindIndex = ReadShort( pData );
-				vertexSize = ReadShort( pData );
+				bindIndex = ReadShort( ppData );
+				vertexSize = ReadShort( ppData );
 
+				unsigned short headerID = ReadChunk( ppData );
 				m_dwVertexSize = vertexSize;
-				m_pVertexData = pData;
-				pData += m_dwVertexSize * m_dwNumVertex;
+				m_pVertexData = *ppData;
+				*ppData += m_dwVertexSize * m_dwNumVertex;
 			}
 			else
 			{
-				m_uiReadSize += m_uiChunkSize; 
-				pData += m_uiChunkSize;
+				*ppData += m_uiChunkSize;
+			}
+
+			if ( ! IsEnd( *ppData ) )
+			{
+				streamID = ReadChunk( ppData );
 			}
 		}
+
+		*ppData -= sizeof(unsigned short) + sizeof(unsigned int);
+	}
+
+	bool    OgreMesh::IsEnd( char * pData )
+	{
+		DWORD dwRead = (DWORD) ( pData - (char *) m_kFileBuffer.GetPointer() );
+		if ( dwRead >= m_kFileBuffer.GetSize() - 1 )
+		{
+			return true;
+		}
+		
+		return false;
 	}
 }
