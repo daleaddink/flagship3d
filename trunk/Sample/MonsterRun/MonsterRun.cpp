@@ -27,7 +27,7 @@ MonsterRunLogic::MonsterRunLogic()
 	m_pHDR = new D3D10HDR;
 #else
 	m_pMonsterMesh = new D3D9PMFMesh;
-	m_pStoneMesh = new D3D9OgreMesh;
+	m_pStoneMesh = new D3D9PMFMesh;
 	m_pBoxMesh = new D3D9XMesh;
 	m_pTerrainTile = new D3D9TerrainTile;
 	m_pSkyBox = new D3D9SkyBox;
@@ -93,7 +93,7 @@ void    MonsterRunLogic::Initialize()
 	m_pMonsterMesh->SetPath( szMeshPath.c_str() );
 
 	szMeshPath = szPath;
-	szMeshPath += L"\\Resource\\cube.mesh";
+	szMeshPath += L"\\Resource\\BoxA.pmf";
 	m_pStoneMesh->SetPath( szMeshPath.c_str() );
 
 	szMeshPath = szPath;
