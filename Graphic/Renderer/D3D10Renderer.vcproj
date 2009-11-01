@@ -324,6 +324,14 @@
 				Name="Header Files"
 				>
 				<File
+					RelativePath="..\Material\D3D10Ambient.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Material\D3D10Basic.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Material\D3D10Glass.h"
 					>
 				</File>
@@ -337,6 +345,10 @@
 				</File>
 				<File
 					RelativePath="..\Material\D3D10Metal.h"
+					>
+				</File>
+				<File
+					RelativePath="..\Material\D3D10PostShadow.h"
 					>
 				</File>
 				<File
@@ -396,6 +408,14 @@
 				Name="Source Files"
 				>
 				<File
+					RelativePath="..\Material\D3D10Ambient.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Material\D3D10Basic.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\Material\D3D10Glass.cpp"
 					>
 				</File>
@@ -409,6 +429,10 @@
 				</File>
 				<File
 					RelativePath="..\Material\D3D10Metal.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Material\D3D10PostShadow.cpp"
 					>
 				</File>
 				<File
@@ -486,6 +510,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\D3D10ShadowMap.h"
+					>
+				</File>
+				<File
 					RelativePath=".\D3D10Texture.h"
 					>
 				</File>
@@ -549,6 +577,10 @@
 				</File>
 				<File
 					RelativePath=".\D3D10SDKMesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\D3D10ShadowMap.cpp"
 					>
 				</File>
 				<File

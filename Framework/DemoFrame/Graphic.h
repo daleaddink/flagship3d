@@ -52,6 +52,7 @@
 
 #ifdef FLAGSHIP_DX10
 // Direct3D10
+#include "../../Graphic/Material/D3D10Basic.h"
 #include "../../Graphic/Material/D3D10SkyBox.h"
 #include "../../Graphic/Material/D3D10Metal.h"
 #include "../../Graphic/Material/D3D10Glass.h"
